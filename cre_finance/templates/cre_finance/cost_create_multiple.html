@@ -1,0 +1,40 @@
+{% extends "cre_finance/base.html" %}
+
+
+{% block title %}
+  Create Cost
+{% endblock title%}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div><a href="{% url 'home' %}">Home</a></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">Amount</div>
+      <div class="col">Type</div>
+      <div class="col">Date start</div>
+      <div class="col">Date end</div>
+    </div>
+    {{ formset.management_form }}
+    {% for form in formset %}
+
+    <div class="row">
+      {{form.id}}
+      <div class="col">{{form.amount}}</div>
+      <div class="col">{{form.type}}</div>
+      <div class="col">{{form.date_start}}</div>
+      <div class="col">{{form.date_end}}</div>
+    </div>
+    {% endfor %}
+    <div class="row">
+      <div class="col">
+        <input type="submit" value="Save">
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

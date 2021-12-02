@@ -1,0 +1,126 @@
+{% extends "cre_finance/base.html" %}
+{% load humanize %}
+{% load cref_extras %}
+
+{% block title %}
+  Loan Detail
+{% endblock title%}
+
+{% block content %}
+<h3> Loan Detail</h3>
+<div>
+  <div><a href="{% url 'home' %}">Home page</a></div>
+  <div><a href="{% url 'loan-update' loan.pk %}">Update</a></div>
+  <div><a href="{% url 'loan-delete' loan.pk %}">Delete</a></div>
+</div>
+
+<br>
+
+<h4>Assumptions</h4>
+
+<div>Loan</div>
+<ul>
+  <li>id: {{ loan.id }}</li>
+  <li>name: {{ loan.name }}</li>
+  <li>arrangement_fee_pct: {{ loan.arrangement_fee_pct|pc_to_percent:1}}</li>
+  <li>interest_pct: {{ loan.interest_pct|pc_to_percent:1}}</li>
+  <li>non_utilisation_fee_pct: {{ loan.non_utilisation_fee_pct|pc_to_percent:1}}</li>
+  <li>exit_fee_pct: {{ loan.exit_fee_pct|pc_to_percent:1}}</li>
+  <li>ltv_covenant: {{ loan.ltv_covenant|pc_to_percent:1}}</li>
+  <li>ltc_covenant: {{ loan.ltc_covenant|pc_to_percent:1}}</li>
+</ul>
+
+<br>
+
+<div>Building</div>
+{% if loan.building  %}
+<ul>
+  <li> building funded:{{loan.building}}
+</li>
+<li>development start date: {{development_start}}</li>
+<li>development end date: {{development_end}}</li>
+<li>building_value: {{ loan.building.value|floatformat:0|intcomma }}</li>
+<li>funding required: {{funding_required|floatformat:0|intcomma}}</li>
+<li>development schedule: {{loan.building.development_schedule|df_to_html|safe}}</li>
+</ul>
+{% else %} No building funded
+{% endif %}
+
+<br>
+
+<h4>Calculations</h4>
+<ul>
+  <li>Size loan:
+    <a href="{% url 'loan_calculate' pk=loan.pk %}">Go</a>
+  </li>
+
+  {% if loan.facility_schedule|df_json_empty == False %}
+  <li>Facility schedule:
+    {{ loan.facility_schedule|df_json_to_html|safe }}
+  </li>
+  {% endif %}
+  <br>
+  {% if loan.funding_schedule|df_json_empty == False %}
+  <li>Funding schedule:
+    {{ loan.funding_schedule|df_json_to_html|safe }}
+  </li>
+  {% endif %}
+</ul>
+
+{% if loan.facility_schedule|df_json_empty == False %}
+<h4>Results</h4>
+<ul>
+  <li>Loan terms:
+    <ul>
+      <li>Facility amount:
+        {% if loan.facility_amount == 0 %}
+        To be calculated
+        {% else %}
+        {{ loan.facility_amount|floatformat:0|intcomma }}
+        {% endif %}
+      </li>
+      <li>Capital committed: {{loan.capital|floatformat:0|intcomma}}</li>
+      <li>Loan headroom: {{loan.headroom|floatformat:0|intcomma}}</li>
+      <li>Equity required:
+        {% if loan.equity_required == 0 %}
+        To be calculated
+        {% else %}
+        {{ loan.equity_required|floatformat:0|intcomma }}
+        {% endif %}
+      </li>
+      <li>Start Date: {{ loan.start_date }}</li>
+      <li>Duration (months): {{loan.term_months|floatformat:0|intcomma}}</li>
+      <li>Maturity Date: {{ loan.maturity_date }}</li>
+      <li>Arrangement Fee:
+        {{ loan.arrangement_fee_pct|pc_to_percent:1}}
+      </li>
+      <li>Interest:
+        {{ loan.interest_pct|pc_to_percent:1}}
+      </li>
+      <li>Non Utilisation Fee:
+        {{ loan.non_utilisation_fee_pct|pc_to_percent:1}}
+      </li>
+      <li>Exit Fee:
+        {{ loan.exit_fee_pct|pc_to_percent:1}}
+      </li>
+    </ul>
+  </li>
+  <li>Leverage metrics:
+    <ul>
+      <li>Loan-to-value: {{ loan.ltv|to_percent:1 }} </li>
+      <li>Loan-to-cost: {{ loan.ltc|to_percent:1 }}</li>
+    </ul>
+  </li>
+  <li>Returns:
+    <ul>
+      <li>Profit: {{loan.profit|floatformat:0|intcomma }}</li>
+      <li>XIRR: {{loan.xirr|to_percent:1}}</li>
+      <li>Equity Multiple: {{loan.em|to_multiple:2}}</li>
+      <li>Cash on Cash yield: {{loan.coc|to_percent:1}}</li>
+    </ul>
+  </li>
+</ul>
+{% endif %}
+
+
+{% endblock %}

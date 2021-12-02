@@ -1,0 +1,59 @@
+{% extends "cre_finance/base.html" %}
+{% load humanize %}
+{% load cref_extras %}
+
+{% block title %}
+  Building Detail
+{% endblock title%}
+
+{% block content %}
+<h3> Building Detail</h3>
+
+<div>
+  <div><a href="{% url 'home' %}">Home page</a></div>
+  <div><a href="{% url 'cost-create' building.id %}">Create Cost</a></div>
+  <div><a href="{% url 'cost-create-multiple' building.id %}">Create Multiple Cost</a></div>
+  <div><a href="{% url 'building-update' building.id %}">Update Building</a></div>
+  <div><a href="{% url 'building-delete' building.id %}">Delete Building</a></div>
+</div>
+
+<ul>
+  <li>ID: {{ building.id }}</li>
+  <li>Name: {{ building.name }}</li>
+  <li>Value: {{ building.value|intcomma }}</li>
+
+  {% if building.loan %}
+  <li>Funded by loan:{{building.loan}}
+    - <a href="{{ building.loan.get_absolute_url }}">Detail</a>
+    - <a href="{% url 'loan-update' building.loan.pk %}">Update</a>
+    - <a href="{% url 'loan-delete' building.loan.pk %}">Delete</a>
+  </li>
+  {% endif %}
+</ul>
+
+
+{% if building_cost %}
+
+<ul>
+  <li>Cost:
+    <ul>
+      {% for cost in building_cost %}
+      <li> {{cost}}
+        - <a href="{% url 'cost-update' building.id cost.id %}">Update</a>
+        - <a href="{{cost.get_absolute_url}}">Detail</a>
+        - <a href="{% url 'cost-delete' building.id cost.pk %}">Delete</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+</ul>
+
+<div>
+  <div> Development Schedule:</div>
+  {{building.development_schedule|df_to_html|safe}}
+</div>
+
+{% endif %}
+
+
+{% endblock %}

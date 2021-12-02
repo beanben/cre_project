@@ -1,0 +1,59 @@
+[
+  {
+    "model": "cre_finance.building",
+    "pk": 1,
+    "fields": {
+      "name": "Beautiful Point",
+      "value": "7490000"
+    }
+  },
+  {
+    "model": "cre_finance.cost",
+    "pk": 1,
+    "fields": {
+      "amount": "100000",
+      "type": "Acquisition costs",
+      "date_start": "2021-06-28",
+      "date_end": "2021-06-28",
+      "building": 1
+    }
+  },
+  {
+    "model": "cre_finance.cost",
+    "pk": 2,
+    "fields": {
+      "amount": "5000000",
+      "type": "Construction costs",
+      "date_start": "2021-07-01",
+      "date_end": "2023-06-28",
+      "building": 1
+    }
+  },
+  {
+    "model": "cre_finance.cost",
+    "pk": 3,
+    "fields": {
+      "amount": "250000",
+      "type": "Professional fees",
+      "date_start": "2021-07-01",
+      "date_end": "2023-06-28",
+      "building": 1
+    }
+  },
+  {
+    "model": "cre_finance.loan",
+    "pk": 1,
+    "fields": {
+      "name": "New Loan",
+      "arrangement_fee_pct": 1,
+      "interest_pct": 6,
+      "non_utilisation_fee_pct": 2,
+      "exit_fee_pct": 1.5,
+      "ltv_covenant": 75,
+      "ltc_covenant": 85,
+      "building": 1,
+      "start_date": "2021-06-28",
+      "maturity_date": "2023-06-28"
+    }
+  }
+]
