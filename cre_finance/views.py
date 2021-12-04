@@ -8,6 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import date
 import pandas as pd
+from django.db.models import Sum
 
 
 # <===== VIEWS COMBINING MODELS =====>
@@ -31,10 +32,15 @@ class BuildingCreateView(CreateView):
 
 class BuildingDetailView(DetailView):
     model = Building
+    pk_url_kwarg = "building_pk"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["building_cost"] = self.object.cost_set.all()
+        building_cost = self.object.cost_set.all()
+        context.update({
+            "building_cost": building_cost,
+            "costs": building_cost.values('type').annotate(total_amount=Sum('amount'))
+        })
         return context
 
 
@@ -61,17 +67,23 @@ class CostCreateView(CreateView):
     form_class = CostForm
     template_name = 'cost_create.html'
 
-    def post(self, request, building_id, *args, **kwargs):
-        building = Building.objects.get(pk=building_id)
+    def post(self, request, building_pk, *args, **kwargs):
+        building = Building.objects.get(pk=building_pk)
         form = CostForm(request.POST)
         if form.is_valid():
             cost = form.save(commit=False)
             cost.building = building
             cost.save()
-            return redirect('building-detail', pk=building_id)
+            return redirect('building:detail', pk=building_pk)
         else:
             context = {"form": form}
             return render(request, self.template_name, context)
+
+
+def cost_extra(request):
+    nb_extras = request.POST.get('extra')
+    building_pk = request.POST.get('building_pk')
+    return redirect('building:cost:create-multiple', nb_extras=nb_extras, building_pk=building_pk)
 
 
 class MultipleCostCreateView(CreateView):
@@ -79,28 +91,37 @@ class MultipleCostCreateView(CreateView):
     form_class = CostForm
     template_name = 'cost_create_multiple.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['formset'] = CostFormSet(queryset=Cost.objects.none())
-        return context
+    def get(self, request, *args, **kwargs):
+        formset = CostFormSet(queryset=Cost.objects.none())
+        context = {"formset": formset}
+        return render(request, self.template_name, context)
 
-    def post(self, request, building_id, *args, **kwargs):
-        building = Building.objects.get(pk=building_id)
-        formset = CostFormSet(request.POST)
+    def post(self, request, building_pk, *args, **kwargs):
+        building = Building.objects.get(pk=building_pk)
+        formset = CostFormSet(data=request.POST)
         if formset.is_valid():
             costs = formset.save(commit=False)
-            costs.building = building
-            costs.save()
-            return redirect('building-detail', pk=building_id)
-        else:
-            print("formset.errors:", formset.errors)
-            context = {"formset": formset}
-            return render(request, self.template_name, context)
+            for cost in costs:
+                cost.building = building
+                cost.save()
+            return redirect('building:detail', building_pk=building_pk)
+
+        context = {"formset": formset}
+        return render(request, self.template_name, context)
+
+
+class MultipleCostDeleteView(DeleteView):
+    model = Cost
+
+    def post(self, request, building_pk, *args, **kwargs):
+        costs = self.request.POST.getlist('cost')
+        Cost.objects.filter(pk__in=costs).delete()
+        return redirect('building:detail', building_pk=building_pk)
 
 
 def create_multiple_costs(request, building_id):
     template_name = 'cost_create_multiple.html'
-    building = Building.objects.get(pk=building_id)
+    building = Building.objects.get(pk=building_pk)
     CostFormSet = modelformset_factory(Cost,
                                        extra=0,
                                        form=CostForm,
@@ -118,6 +139,11 @@ def create_multiple_costs(request, building_id):
 
 class CostDetailView(DetailView):
     model = Cost
+    pk_url_kwarg = "cost_pk"
+
+
+class CostListView(ListView):
+    model = Cost
 
 
 class CostDeleteView(DeleteView):
@@ -125,7 +151,7 @@ class CostDeleteView(DeleteView):
     template_name = "confirm_delete.html"
 
     def get_success_url(self):
-        return reverse('building-detail', kwargs={'pk': self.object.building.id})
+        return reverse('building:detail', kwargs={'pk': self.object.building.pk})
 
 
 class CostUpdateView(UpdateView):
@@ -143,6 +169,7 @@ class LoanCreateView(CreateView):
 
 class LoanDetailView(DetailView):
     model = Loan
+    pk_url_kwarg = "loan_pk"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -172,4 +199,4 @@ class LoanUpdateView(UpdateView):
 def loan_calculate(request, pk):
     loan = Loan.objects.get(pk=pk)
     loan.calculate()
-    return redirect('loan-detail', pk=pk)
+    return redirect('loan:detail', pk=pk)

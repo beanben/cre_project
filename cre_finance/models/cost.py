@@ -37,7 +37,7 @@ class Cost(models.Model):
         return f'£{"{:,.0f}".format(self.amount)} - {self.type}'
 
     def get_absolute_url(self):
-        return reverse('cost-detail', kwargs={'pk': self.pk, 'building_id': self.building.id})
+        return reverse('building:cost:detail', kwargs={'cost_pk': self.pk, 'building_pk': self.building.pk})
 
     @property
     def schedule(self):

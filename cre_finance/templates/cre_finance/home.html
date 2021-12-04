@@ -7,16 +7,16 @@
 
 {% block content %}
 <h3> Home </h3>
-<div><a href="{% url 'building-create' %}">Create Building</a></div>
-<div><a href="{% url 'loan-create' %}">Create Loan</a></div>
+<div><a href="{% url 'building:create' %}">Create Building</a></div>
+<div><a href="{% url 'loan:create' %}">Create Loan</a></div>
 
 <h4>Buildings</h4>
  <ul>
 {% for building in buildings %}
     <li>{{ building }}
       - <a href="{{ building.get_absolute_url }}">Detail</a>
-      - <a href="{% url 'building-update' building.pk %}">Update</a>
-      - <a href="{% url 'building-delete' building.pk %}">Delete</a>
+      - <a href="{% url 'building:update' building.pk %}">Update</a>
+      - <a href="{% url 'building:delete' building.pk %}">Delete</a>
     </li>
 {% endfor %}
 </ul>
@@ -26,8 +26,8 @@
 {% for loan in loans %}
     <li>{{ loan }}
       - <a href="{{ loan.get_absolute_url }}">Detail</a>
-      - <a href="{% url 'loan-update' loan.pk %}">Update</a>
-      - <a href="{% url 'loan-delete' loan.pk %}">Delete</a>
+      - <a href="{% url 'loan:update' loan.pk %}">Update</a>
+      - <a href="{% url 'loan:delete' loan.pk %}">Delete</a>
     </li>
 {% endfor %}
 </ul>

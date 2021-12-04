@@ -13,7 +13,7 @@ class Building(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('building-detail', kwargs={'pk': self.pk})
+        return reverse('building:detail', kwargs={'building_pk': self.pk})
 
     @property
     def development_schedule(self):

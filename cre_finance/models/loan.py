@@ -66,7 +66,7 @@ class Loan(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('loan-detail', kwargs={'pk': self.pk})
+        return reverse('loan:detail', kwargs={'loan_pk': self.pk})
 
     @property
     def funding_required(self):

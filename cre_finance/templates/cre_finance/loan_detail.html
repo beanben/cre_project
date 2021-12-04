@@ -10,8 +10,8 @@
 <h3> Loan Detail</h3>
 <div>
   <div><a href="{% url 'home' %}">Home page</a></div>
-  <div><a href="{% url 'loan-update' loan.pk %}">Update</a></div>
-  <div><a href="{% url 'loan-delete' loan.pk %}">Delete</a></div>
+  <div><a href="{% url 'loan:update' loan.pk %}">Update</a></div>
+  <div><a href="{% url 'loan:delete' loan.pk %}">Delete</a></div>
 </div>
 
 <br>
@@ -51,7 +51,7 @@
 <h4>Calculations</h4>
 <ul>
   <li>Size loan:
-    <a href="{% url 'loan_calculate' pk=loan.pk %}">Go</a>
+    <a href="{% url 'loan:calculate' pk=loan.pk %}">Go</a>
   </li>
 
   {% if loan.facility_schedule|df_json_empty == False %}

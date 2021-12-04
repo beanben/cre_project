@@ -11,10 +11,10 @@
 
 <div>
   <div><a href="{% url 'home' %}">Home page</a></div>
-  <div><a href="{% url 'cost-create' building.id %}">Create Cost</a></div>
-  <div><a href="{% url 'cost-create-multiple' building.id %}">Create Multiple Cost</a></div>
-  <div><a href="{% url 'building-update' building.id %}">Update Building</a></div>
-  <div><a href="{% url 'building-delete' building.id %}">Delete Building</a></div>
+  <div><a href="{% url 'building:cost:create' building.pk %}">Create Cost</a></div>
+  <div><a href="{% url 'building:cost:create-multiple' building.pk %}">Create Multiple Cost</a></div>
+  <div><a href="{% url 'building:update' building.pk %}">Update Building</a></div>
+  <div><a href="{% url 'building:delete' building.pk %}">Delete Building</a></div>
 </div>
 
 <ul>
@@ -25,8 +25,8 @@
   {% if building.loan %}
   <li>Funded by loan:{{building.loan}}
     - <a href="{{ building.loan.get_absolute_url }}">Detail</a>
-    - <a href="{% url 'loan-update' building.loan.pk %}">Update</a>
-    - <a href="{% url 'loan-delete' building.loan.pk %}">Delete</a>
+    - <a href="{% url 'loan:update' building.loan.pk %}">Update</a>
+    - <a href="{% url 'loan:delete' building.loan.pk %}">Delete</a>
   </li>
   {% endif %}
 </ul>
@@ -37,13 +37,31 @@
 <ul>
   <li>Cost:
     <ul>
+      <form method="post" action="{% url 'building:cost:delete-multiple' building.pk %}">{% csrf_token %}
       {% for cost in building_cost %}
       <li> {{cost}}
-        - <a href="{% url 'cost-update' building.id cost.id %}">Update</a>
+        - <a href="{% url 'building:cost:update' building.pk cost.pk %}">Update</a>
         - <a href="{{cost.get_absolute_url}}">Detail</a>
-        - <a href="{% url 'cost-delete' building.id cost.pk %}">Delete</a>
+        <input type="checkbox" value="{{ cost.pk }}" name="cost">
       </li>
       {% endfor %}
+        <button type="submit">Delete Selected Costs</button>
+    </form>
+    </ul>
+  </li>
+</ul>
+
+<ul>
+  <li>Costs:
+    <ul>
+      {% for cost in costs %}
+      <li> {{cost.type}}: {{cost.total_amount|floatformat:0|intcomma}}</li>
+      {% endfor %}
+      <li>
+        <a href="{% url 'building:cost:list' building.pk %}">
+          Cost Detail List
+        </a>
+      </li>
     </ul>
   </li>
 </ul>

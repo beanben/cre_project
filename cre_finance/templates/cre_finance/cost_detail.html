@@ -10,8 +10,8 @@
 <h3> Cost Detail</h3>
 <div>
   <div><a href="{% url 'home' %}">Home page</a></div>
-  <div><a href="{% url 'building-detail' cost.building.pk %}">Building Detail</a></div>
-  <div><a href="{% url 'cost-delete' cost.building.id cost.pk %}">Delete Cost</a><div>
+  <div><a href="{% url 'building:detail' cost.building.pk %}">Building Detail</a></div>
+  <div><a href="{% url 'building:cost:delete' cost.building.pk cost.pk %}">Delete Cost</a><div>
 </div>
 
 
