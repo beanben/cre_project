@@ -192,11 +192,12 @@ class LoanDeleteView(DeleteView):
 
 class LoanUpdateView(UpdateView):
     model = Loan
+    pk_url_kwarg = "loan_pk"
     form_class = LoanUpdateForm
     template_name = "update_form.html"
 
 
-def loan_calculate(request, pk):
-    loan = Loan.objects.get(pk=pk)
+def loan_calculate(request, loan_pk):
+    loan = Loan.objects.get(pk=loan_pk)
     loan.calculate()
-    return redirect('loan:detail', pk=pk)
+    return redirect('loan:detail', loan_pk=loan_pk)

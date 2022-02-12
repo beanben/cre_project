@@ -51,7 +51,7 @@
 <h4>Calculations</h4>
 <ul>
   <li>Size loan:
-    <a href="{% url 'loan:calculate' pk=loan.pk %}">Go</a>
+    <a href="{% url 'loan:calculate' loan.pk %}">Go</a>
   </li>
 
   {% if loan.facility_schedule|df_json_empty == False %}
@@ -107,8 +107,26 @@
   </li>
   <li>Leverage metrics:
     <ul>
-      <li>Loan-to-value: {{ loan.ltv|to_percent:1 }} </li>
-      <li>Loan-to-cost: {{ loan.ltc|to_percent:1 }}</li>
+      <li>Facility amount:
+        {% if loan.facility_amount == 0 %}
+        To be calculated
+        {% else %}
+        {{ loan.facility_amount|floatformat:0|intcomma }}
+        {% endif %}
+      </li>
+      <li>
+        building_value: {{ loan.building.value|floatformat:0|intcomma }}
+      </li>
+      <li>
+        total_fundable_costs: {{ loan.total_fundable_costs|floatformat:0|intcomma }}
+      </li>
+
+      <li>Loan-to-value: {{ loan.ltv|to_percent:1 }}
+        (Covenant: {{ loan.ltv_covenant }}%)
+      </li>
+      <li>Loan-to-cost: {{ loan.ltc|to_percent:1 }}
+        (Covenant: {{ loan.ltc_covenant }}% )
+      </li>
     </ul>
   </li>
   <li>Returns:

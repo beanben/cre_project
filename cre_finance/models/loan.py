@@ -280,8 +280,11 @@ class Loan(models.Model):
             0)
 
         # equity funding in period where equity is last available
-        index_last = np.where(
-            schedule["equity capital funding"] == 0)[0][0]
+        try:
+            index_last = np.where(
+                schedule["equity capital funding"] == 0)[0][0]
+        except:
+            pdb.set_trace()
         schedule.at[index_last, "equity capital funding"] = equity - \
             schedule["equity capital funding"].sum()
 
