@@ -18,20 +18,35 @@ def get_coordinates(street, city, postalcode):
     # query_string = urllib.parse.quote_plus(address)
     geo_url = f'https://nominatim.openstreetmap.org/search.php?{query_string}&format=jsonv2'
     response = requests.get(geo_url)
+    # pdb.set_trace()
     if len(response.json()) != 0:
-        latitude = response.json()[0]['lat']
-        longitude = response.json()[0]['lon']
-        place_id = response.json()[0]['place_id']
+        return {
+            "latitude": response.json()[0]['lat'],
+            "longitude": response.json()[0]['lon'],
+            "place_id": response.json()[0]['place_id'],
+            "osm_id": response.json()[0].get('osm_id')
+        }
 
-        return latitude, longitude, place_id
 
+# https://nominatim.openstreetmap.org/ui/details.html?osmtype=W&osmid=4440508&class=highway&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json
+# https://nominatim.openstreetmap.org/details.php?osmtype=W&osmid=4440508&class=highway&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json
 
-def get_address(place_id):
-    geo_url = f'https://nominatim.openstreetmap.org/details.php?place_id={place_id}&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json'
-    response = requests.get(geo_url)
-    country = response.json()["addresstags"]["country"]
+def get_address(place_id, osm_id):
+    if osm_id:
+        geo_url = f'https://nominatim.openstreetmap.org/details.php?osmtype=W&osmid={osm_id}&class=highway&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json'
+        response = requests.get(geo_url)
+        try:
+            country = response.json()["address"][9]["localname"]
+        except:
+            pdb.set_trace()
+
+    elif place_id:
+        geo_url = f'https://nominatim.openstreetmap.org/details.php?place_id={place_id}&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json'
+        response = requests.get(geo_url)
+        country = response.json()["addresstags"]["country"]
+
     city = response.json()["localname"]
-    return city, country
+    return {"city": city, "country": country}
 
 
 class Property(models.Model):
@@ -44,17 +59,21 @@ class Property(models.Model):
     latitude = models.FloatField(default=0)
 
     def clean(self):
-        if self.longitude == 0 or self.latitude == 0:
-            self.latitude, self.longitude, place_id = get_coordinates(
-                street=self.street_address,
-                city=self.city,
-                postalcode=self.postcode
-            )
-            pdb.set_trace()
-            if not self.city:
-                self.city = get_address(place_id)[0]
-            if not self.country:
-                self.country = get_address(place_id)[1]
+        coordinates = get_coordinates(
+            street=self.street_address,
+            city=self.city,
+            postalcode=self.postcode
+        )
+        address = get_address(coordinates["place_id"], coordinates["osm_id"])
+
+        if self.longitude == 0:
+            self.longitude = coordinates["longitude"]
+        if self.latitude == 0:
+            self.latitude = coordinates["latitude"]
+        if not self.city:
+            self.city = address["city"]
+        if not self.country:
+            self.country = address["country"]
 
     def __str__(self):
         return self.name
@@ -87,3 +106,26 @@ class PropertyUpdateForm(ModelForm):
             'latitude',
             'longitude',
         ]
+
+    # repetition of model method
+    def clean(self):
+        super().clean()
+
+        coordinates = get_coordinates(
+            street=self.cleaned_data.get("street_address"),
+            city=self.cleaned_data.get("city"),
+            postalcode=self.cleaned_data.get("postcode")
+        )
+        address = get_address(coordinates["place_id"], coordinates["osm_id"])
+
+        if self.cleaned_data.get("longitude") == 0:
+            self.cleaned_data["longitude"] = coordinates["longitude"]
+
+        if self.cleaned_data.get("latitude") == 0:
+            self.cleaned_data["latitude"] = coordinates["latitude"]
+
+        if not self.cleaned_data.get("city"):
+            self.cleaned_data["city"] = address["city"]
+
+        if not self.cleaned_data.get("country"):
+            self.cleaned_data["country"] = address["country"]
