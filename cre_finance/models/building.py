@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from django.forms import ModelForm, CharField
+from django.forms import ModelForm
 from django import forms
 import pandas as pd
 

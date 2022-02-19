@@ -1,6 +1,7 @@
 from .models.cost import Cost, CostForm, CostFormSet
 from .models.building import Building, BuildingForm
 from .models.loan import Loan, LoanForm, LoanUpdateForm
+from .models.property import Property, PropertyForm
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView
@@ -12,18 +13,45 @@ from django.db.models import Sum
 
 
 # <===== VIEWS COMBINING MODELS =====>
-def home(request):
-    buildings = Building.objects.all()
-    loans = Loan.objects.all()
 
+
+def home(request):
     context = {
-        "buildings": buildings,
-        "loans": loans
+        'properties': Property.objects.all()
     }
     return render(request, 'cre_finance/home.html', context)
 
+# <=====  BUILDING VIEWS =====>
+
+
+class PropertyCreateView(CreateView):
+    model = Property
+    form_class = PropertyForm
+    template_name = 'property_create.html'
+    success_url = reverse_lazy('home')
+
+
+class PropertyUpdateView(UpdateView):
+    model = Property
+    form_class = PropertyForm
+    pk_url_kwarg = "property_pk"
+    template_name = "property_update.html"
+    # context_object_name = "property_selected"
+
+    def get_success_url(self):
+        return reverse('property:update', args={self.object.pk})
+
+
+class PropertyDeleteView(DeleteView):
+    model = Property
+    pk_url_kwarg = "property_pk"
+    template_name = "confirm_delete.html"
+    success_url = reverse_lazy('home')
+
 
 # <=====  BUILDING VIEWS =====>
+
+
 class BuildingCreateView(CreateView):
     model = Building
     form_class = BuildingForm

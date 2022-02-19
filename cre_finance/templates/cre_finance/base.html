@@ -1,7 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'cre_finance/css/cre_finance.css' %}">
+  {% block css_imported %}
+  {% endblock css_imported %}
+{% endblock css %}
+
+
+
+{% block content %}
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+    {% block section %}
+    {% endblock section %}
+    </div>
+  </div>
+</div>
+{% endblock content%}
+
 
 {% block js %}
+  {% block js_imported %}
+  {% endblock js_imported %}
 <script src="{% static 'cre_finance/js/cre_finance.js' %}"></script>
-{% endblock %}
+{% endblock js %}

@@ -1,0 +1,76 @@
+{% extends "cre_finance/base.html" %}
+
+
+{% block title %}
+  Description
+{% endblock title %}
+
+{% block sidebar %}
+  {% include 'cre_finance/sidebar.html' %}
+{% endblock sidebar %}\
+
+{% block css_imported %}
+<!-- leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+{% endblock css_imported%}
+
+{% block section %}
+<div class="container">
+  <div class="row p-3">
+    <div class="col">
+      <form method="post">{% csrf_token %}
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="col">Property Name</th>
+              <td>{{form.name}}</td>
+            </tr>
+            <tr>
+              <th scope="col">Street Address</th>
+              <td>{{form.street_address}}</td>
+            </tr>
+            <tr>
+              <th scope="col">City</th>
+              <td>{{form.city}}</td>
+            </tr>
+            <tr>
+              <th scope="col">Postcode</th>
+              <td>{{form.postcode}}</td>
+            </tr>
+            <tr>
+              <th scope="col">Country</th>
+              <td>{{form.country}}</td>
+            </tr>
+            <tr>
+              <th scope="col">Longitude</th>
+              <td>{{form.longitude}}</td>
+            </tr>
+            <tr>
+              <th scope="col">Latitude</th>
+              <td>{{form.latitude}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <input type="submit" value="Save">
+      </form>
+    </div>
+    <div class="col">
+      <div id="map" class="map">
+        {{property.name|json_script:"name"}}
+        {{property.longitude|json_script:"lon"}}
+        {{property.latitude|json_script:"lat"}}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock section %}
+
+{% block js_imported %}
+
+<!-- leaflet -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+{% endblock js_imported %}

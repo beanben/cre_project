@@ -1,0 +1,18 @@
+<div class="d-flex flex-column p-3 sidebar">
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item text-white">
+      <a
+      href="{% url 'home'%}"
+      class="nav-link text-white
+      {% if 'property' not in request.path %} active {% endif %}"
+      aria-current="page">Home</a>
+    </li>
+    <li class="nav-item">
+      <a
+      href="{% url 'property:create' %}"
+      class="nav-link text-white
+       {% if 'property' in request.path %} active {% endif %}"
+       > New Deal</a>
+    </li>
+  </ul>
+</div>

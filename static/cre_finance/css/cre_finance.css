@@ -1,0 +1,27 @@
+.sidebar {
+  height: 100vh;
+  background-color: #0F56B3;
+  width: 280px;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.icon {
+  height: 1rem;
+  display: block;
+}
+.edit {
+  background: url('../../cre_finance/img/edit.svg') no-repeat;
+}
+
+.frame{
+  height: 1rem;
+  display: block;
+}
+
+.map {
+  height: 400px;
+  width: 100%;
+}

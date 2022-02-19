@@ -5,31 +5,51 @@
   Home
 {% endblock title%}
 
-{% block content %}
-<h3> Home </h3>
-<div><a href="{% url 'building:create' %}">Create Building</a></div>
-<div><a href="{% url 'loan:create' %}">Create Loan</a></div>
+{% block sidebar %}
+  {% include 'cre_finance/sidebar.html' %}
+{% endblock sidebar %}
 
-<h4>Buildings</h4>
- <ul>
-{% for building in buildings %}
-    <li>{{ building }}
-      - <a href="{{ building.get_absolute_url }}">Detail</a>
-      - <a href="{% url 'building:update' building.pk %}">Update</a>
-      - <a href="{% url 'building:delete' building.pk %}">Delete</a>
-    </li>
-{% endfor %}
-</ul>
+{% block section %}
+<div class="container">
+  <div class="row p-3">
+    <div class="col">
+      <h4>Deals</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Property Name</th>
+            <th scope="col">Street Address</th>
+            <th scope="col">City</th>
+            <th scope="col">Postcode</th>
+            <th scope="col">Country</th>
+            <th scope="col">Longitude</th>
+            <th scope="col">Latitude</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for property in properties %}
+          <tr>
+            <td>
+              <a href="{% url 'property:update' property.pk %}">
+                {{property.name}}
+              </a>
+            </td>
+            <td>{{property.street_address}}</td>
+            <td>{{property.city}}</td>
+            <td>{{property.postcode}}</td>
+            <td>{{property.country}}</td>
+            <td>{{property.longitude}}</td>
+            <td>{{property.latitude}}</td>
+            <td>
+              <a href="{% url 'property:delete' property.pk %}">
+                Delete
+              </a>
 
-<h4>Loans</h4>
- <ul>
-{% for loan in loans %}
-    <li>{{ loan }}
-      - <a href="{{ loan.get_absolute_url }}">Detail</a>
-      - <a href="{% url 'loan:update' loan.pk %}">Update</a>
-      - <a href="{% url 'loan:delete' loan.pk %}">Delete</a>
-    </li>
-{% endfor %}
-</ul>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-{% endblock %}
+{% endblock section %}
