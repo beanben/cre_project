@@ -21,7 +21,9 @@ if (addButton) {
   addButton.addEventListener('click', addForm);
 };
 
-// leaflet https://leafletjs.com/examples/quick-start/
+
+
+// < ===== leaflet https://leafletjs.com/examples/quick-start/
 
 
 const lon = JSON.parse(document.getElementById('lon').textContent);
@@ -41,6 +43,34 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     accessToken: mapBoxAccessToken
 }).addTo(map);
 
-
 var marker = L.marker([lat, lon]).addTo(map);
 marker.bindPopup("<b>" + name +"</b>").openPopup();
+
+// < ==== JS toggle class
+
+// window.onload = function(){
+//   var hideElements = document.querySelectorAll("th");
+//   console.log("onload");
+//   console.log(hideElements);
+// }
+
+// window.addEventListener('DOMContentLoaded', (event) => {
+//   var hideElements = document.querySelectorAll("th");
+//   console.log("onload");
+//   console.log(hideElements);
+// })
+
+
+function toggleHide(){
+  var hideElements = document.querySelectorAll(".toggleHide");
+  var toggleCoordinates = document.getElementById('toggleCoordinates');
+
+hideElements.forEach((el) => {
+    const elemHidden = el.classList.toggle('hide');
+    if(elemHidden) {
+      toggleCoordinates.innerHTML = "Show Coordinates"
+    } else {
+      toggleCoordinates.innerHTML = "Hide Coordinates"
+    }
+  });
+  }

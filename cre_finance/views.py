@@ -1,7 +1,7 @@
 from .models.cost import Cost, CostForm, CostFormSet
 from .models.building import Building, BuildingForm
 from .models.loan import Loan, LoanForm, LoanUpdateForm
-from .models.property import Property, PropertyForm
+from .models.property import Property, PropertyForm, PropertyUpdateForm
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView
@@ -33,7 +33,7 @@ class PropertyCreateView(CreateView):
 
 class PropertyUpdateView(UpdateView):
     model = Property
-    form_class = PropertyForm
+    form_class = PropertyUpdateForm
     pk_url_kwarg = "property_pk"
     template_name = "property_update.html"
     # context_object_name = "property_selected"

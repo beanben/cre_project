@@ -43,17 +43,26 @@
               <th scope="col">Country</th>
               <td>{{form.country}}</td>
             </tr>
-            <tr>
+            <tr class="toggleHide">
               <th scope="col">Longitude</th>
               <td>{{form.longitude}}</td>
             </tr>
-            <tr>
+            <tr class="toggleHide">
               <th scope="col">Latitude</th>
               <td>{{form.latitude}}</td>
             </tr>
           </tbody>
         </table>
-        <input type="submit" value="Save">
+        <div class="row">
+          <div class="col">
+            <input type="submit" value="Save">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button id="toggleCoordinates" class="but btn-primary" type="button" onclick="toggleHide()">Hide Coordinates</button>
+          </div>
+        </div>
       </form>
     </div>
     <div class="col">

@@ -5,7 +5,6 @@ import requests
 import urllib
 import pdb
 import json
-import pdb
 
 
 def get_coordinates(street, city, postalcode):
@@ -23,13 +22,16 @@ def get_coordinates(street, city, postalcode):
         latitude = response.json()[0]['lat']
         longitude = response.json()[0]['lon']
         place_id = response.json()[0]['place_id']
+
         return latitude, longitude, place_id
 
 
-def get_country(place_id):
+def get_address(place_id):
     geo_url = f'https://nominatim.openstreetmap.org/details.php?place_id={place_id}&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json'
     response = requests.get(geo_url)
-    return response.json()["addresstags"]["country"]
+    country = response.json()["addresstags"]["country"]
+    city = response.json()["localname"]
+    return city, country
 
 
 class Property(models.Model):
@@ -49,8 +51,10 @@ class Property(models.Model):
                 postalcode=self.postcode
             )
             pdb.set_trace()
+            if not self.city:
+                self.city = get_address(place_id)[0]
             if not self.country:
-                self.country = get_country(place_id)
+                self.country = get_address(place_id)[1]
 
     def __str__(self):
         return self.name
@@ -67,6 +71,19 @@ class PropertyForm(ModelForm):
             'street_address',
             'city',
             'postcode',
+            'country'
+        ]
+
+
+class PropertyUpdateForm(ModelForm):
+    class Meta:
+        model = Property
+        fields = [
+            'name',
+            'street_address',
+            'city',
+            'postcode',
             'country',
             'latitude',
-            'longitude']
+            'longitude',
+        ]
