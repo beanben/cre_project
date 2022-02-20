@@ -1,3 +1,5 @@
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.urls import reverse, reverse_lazy
 from .models.property import Property, PropertyForm, PropertyUpdateForm
 
 
