@@ -35,10 +35,7 @@ def get_address(place_id, osm_id):
     if osm_id:
         geo_url = f'https://nominatim.openstreetmap.org/details.php?osmtype=W&osmid={osm_id}&class=highway&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json'
         response = requests.get(geo_url)
-        try:
-            country = response.json()["address"][9]["localname"]
-        except:
-            pdb.set_trace()
+        country = response.json()["address"][9]["localname"]
 
     elif place_id:
         geo_url = f'https://nominatim.openstreetmap.org/details.php?place_id={place_id}&addressdetails=1&hierarchy=0&group_hierarchy=1&format=json'

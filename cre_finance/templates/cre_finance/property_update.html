@@ -43,11 +43,11 @@
               <th scope="col">Country</th>
               <td>{{form.country}}</td>
             </tr>
-            <tr class="toggleHide">
+            <tr class="coordinates hide">
               <th scope="col">Longitude</th>
               <td>{{form.longitude}}</td>
             </tr>
-            <tr class="toggleHide">
+            <tr class="coordinates hide">
               <th scope="col">Latitude</th>
               <td>{{form.latitude}}</td>
             </tr>
@@ -60,7 +60,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <button id="toggleCoordinates" class="but btn-primary" type="button" onclick="toggleHide()">Hide Coordinates</button>
+            <button id="toggleCoordinates" class="but btn-primary" type="button" onclick="toggleHide()">Show Coordinates</button>
           </div>
         </div>
       </form>

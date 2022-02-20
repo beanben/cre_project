@@ -62,7 +62,7 @@ marker.bindPopup("<b>" + name +"</b>").openPopup();
 
 
 function toggleHide(){
-  var hideElements = document.querySelectorAll(".toggleHide");
+  var hideElements = document.querySelectorAll(".coordinates");
   var toggleCoordinates = document.getElementById('toggleCoordinates');
 
 hideElements.forEach((el) => {
