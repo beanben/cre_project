@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 
 class Sponsor(models.Model):
@@ -6,3 +7,9 @@ class Sponsor(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SponsorForm(ModelForm):
+    class Meta:
+        model = Sponsor
+        fields = ['name']
