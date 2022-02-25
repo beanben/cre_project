@@ -1,4 +1,4 @@
-{% extends "cre_finance/base.html" %}
+    {% extends "cre_finance/base.html" %}
 
 
 {% block title %}
@@ -59,27 +59,19 @@
           </div>
         </div>
         <div class="row">
-          <div class="col">
+          <!-- <div class="col">
             <button id="toggleCoordinates" class="but btn-primary" type="button" onclick="toggleHide()">Show Coordinates</button>
-          </div>
+          </div> -->
         </div>
       </form>
     </div>
     <div class="col">
-      <div id="map" class="map">
+      <!-- <div id="map" class="map">
         {{property.name|json_script:"name"}}
         {{property.longitude|json_script:"lon"}}
         {{property.latitude|json_script:"lat"}}
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
 {% endblock section %}
-
-{% block js_imported %}
-
-<!-- leaflet -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-   crossorigin=""></script>
-{% endblock js_imported %}

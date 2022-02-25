@@ -1,0 +1,99 @@
+{% extends "cre_finance/base.html" %}
+{% load static %}
+
+{% block title %}
+  Description
+{% endblock title %}
+
+{% block css_imported %}
+<!-- leaflet's CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+{% endblock css_imported %}
+
+
+{% block sidebar %}
+  {% include 'cre_finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block section %}
+<form method="post">{% csrf_token %}
+  <div class="d-flex flex-column h-100">
+
+    <div class="p-2 border h-25">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Property Name</th>
+            <th scope="col">Street Address</th>
+            <th scope="col">City</th>
+            <th scope="col">Postcode</th>
+            <th scope="col">Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{property_form.name}}</td>
+            <td>{{property_form.street_address}}</td>
+            <td>{{property_form.city}}</td>
+            <td>{{property_form.postcode}}</td>
+            <td>{{property_form.country}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="p-2 border h-75 d-flex align-content-stretch">
+      <div class="d-flex flex-column">
+
+        <div class="p-2 border ">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Sponsor Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{sponsor_form.name}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-2 border ">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Broker Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{broker_form.name}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="p-2 border ">
+        MAP HERE
+      </div>
+
+    </div>
+
+  </div>
+  <input type="submit" value="Save">
+</form>
+  <!-- <div class="d-flex align-items-stretch p-3 ">
+    <div class="p-2 border flex-fill">Test 1</div>
+    <div class="p-2 border flex-fill">Test 2</div>
+  </div> -->
+
+{% endblock section %}
+
+{% block js_imported %}
+  <script src="{% static 'cre_finance/js/cre_map.js' %}"></script>
+{% endblock js_imported %}

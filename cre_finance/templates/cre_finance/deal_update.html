@@ -1,0 +1,138 @@
+{% extends "cre_finance/base.html" %}
+{% load static %}
+
+{% block title %}
+  Description
+{% endblock title %}
+
+{% block css_imported %}
+<!-- leaflet's CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+{% endblock css_imported %}
+
+{% block sidebar %}
+  {% include 'cre_finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block section %}
+<div class="container">
+  <div class="row p-3">
+    <div class="col">
+      <form method="post">{% csrf_token %}
+
+        <div class="row">
+          <div class="col">
+
+            <div class="row">
+              <div class="col">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Property Name</th>
+                      <th scope="col">Street Address</th>
+                      <th scope="col">City</th>
+                      <th scope="col">Postcode</th>
+                      <th scope="col">Country</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{property_form.name}}</td>
+                      <td>{{property_form.street_address}}</td>
+                      <td>{{property_form.city}}</td>
+                      <td>{{property_form.postcode}}</td>
+                      <td>{{property_form.country}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row coordinates hide">
+              <div class="col-6">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th scope="col">Longitude</th>
+                      <td>{{property_form.longitude}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="col">Latitude</th>
+                      <td>{{property_form.latitude}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col-4 h-75">
+            <div class="row">
+              <div class="col">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sponsor Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{sponsor_form.name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Broker Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{broker_form.name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-8">
+            <div id="map" class="map">
+              {{deal_property.name|json_script:"name"}}
+              {{deal_property.longitude|json_script:"lon"}}
+              {{deal_property.latitude|json_script:"lat"}}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-auto">
+            <input type="submit" value="Development >">
+          </div>
+          <div class="col-auto">
+            <button id="toggleCoordinates" class="but btn-primary" type="button" onclick="toggleHide()">Show Coordinates</button>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock section %}
+
+{% block js_imported %}
+  <script src="{% static 'cre_finance/js/cre_map.js' %}"></script>
+{% endblock js_imported %}

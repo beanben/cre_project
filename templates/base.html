@@ -21,16 +21,14 @@
     {% endblock %}
   </head>
   <body>
-    {% spaceless %}
     {% block structure %}
       {% block content %}
       {% endblock content %}
     {% endblock structure %}
-    {% endspaceless %}
-    {% block js %}
-    {% endblock js %}
       <!-- Bootstrap js -->
       <script src="{% static 'project/js/bootstrap.min.js' %}"></script>
+      {% block js %}
+      {% endblock js %}
     </footer>
     </main>
   </body>

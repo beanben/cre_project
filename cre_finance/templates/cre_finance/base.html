@@ -7,26 +7,28 @@
   {% endblock css_imported %}
 {% endblock css %}
 
-
-
 {% block content %}
-
-{% block sidebar %}
-{% endblock sidebar %}
-
-<div class="container-fluid">
+<div class="container-fluid p-0">
   <div class="row">
-    <div class="col">
-    {% block section %}
-    {% endblock section %}
+    <div class="col-2 p-0">
+      {% block sidebar %}
+      {% endblock sidebar %}
+    </div>
+    <div class="col-10 p-0">
+      {% block section %}
+      {% endblock section %}
     </div>
   </div>
 </div>
+
 {% endblock content%}
 
-
 {% block js %}
+<script src="{% static 'cre_finance/js/cre_finance.js' %}"></script>
+<!-- leaflet -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
   {% block js_imported %}
   {% endblock js_imported %}
-<script src="{% static 'cre_finance/js/cre_finance.js' %}"></script>
 {% endblock js %}

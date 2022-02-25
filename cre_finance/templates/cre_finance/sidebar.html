@@ -4,14 +4,14 @@
       <a
       href="{% url 'home'%}"
       class="nav-link text-white
-      {% if 'property' not in request.path %} active {% endif %}"
+      {% if 'deal' not in request.path %} active {% endif %}"
       aria-current="page">Home</a>
     </li>
     <li class="nav-item">
       <a
-      href="{% url 'property:create' %}"
+      href="{% url 'deal:create' %}"
       class="nav-link text-white
-       {% if 'property' in request.path %} active {% endif %}"
+       {% if 'deal' in request.path %} active {% endif %}"
        > New Deal</a>
     </li>
   </ul>
