@@ -1,4 +1,4 @@
-{% extends "cre_finance/base.html" %}
+Building{% extends "cre_finance/base.html" %}
 
 
 {% block title %}
@@ -14,29 +14,29 @@
 
   <div class="row p-3">
     <div class="col-6">
-      <h4>Deals</h4>
+      <h4>Loans</h4>
 
       <table class="table">
         <thead>
           <tr>
             <th scope="col">Sponsor Name</th>
-            <th scope="col">Property Name</th>
+            <th scope="col">Building Name</th>
             <th scope="col">Broker Name</th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          {% for deal in deals %}
+          {% for loan in loans %}
           <tr>
             <td>
-              <a href="{% url 'deal:update' deal.pk %}">
-                {{deal.sponsor.name}}
+              <a href="{% url 'loan:update_description' loan.pk %}">
+                {{loan.sponsor.name}}
               </a>
             </td>
-            <td>{{deal.property.name}}</td>
-            <td>{{deal.broker.name}}</td>
+            <td>{{loan.building.name}}</td>
+            <td>{{loan.broker.name}}</td>
             <td>
-              <a href="{% url 'deal:delete' deal.pk %}">
+              <a href="{% url 'loan:delete' loan.pk %}">
               Delete
               </a>
             </td>

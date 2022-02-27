@@ -1,4 +1,4 @@
-{% extends "cre_finance/base.html" %}
+Building{% extends "cre_finance/base.html" %}
 {% load static %}
 
 {% block title %}
@@ -30,7 +30,7 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">Property Name</th>
+                      <th scope="col">Building Name</th>
                       <th scope="col">Street Address</th>
                       <th scope="col">City</th>
                       <th scope="col">Postcode</th>
@@ -39,11 +39,11 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{{property_form.name}}</td>
-                      <td>{{property_form.street_address}}</td>
-                      <td>{{property_form.city}}</td>
-                      <td>{{property_form.postcode}}</td>
-                      <td>{{property_form.country}}</td>
+                      <td>{{building_form.name}}</td>
+                      <td>{{building_form.street_address}}</td>
+                      <td>{{building_form.city}}</td>
+                      <td>{{building_form.postcode}}</td>
+                      <td>{{building_form.country}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -55,11 +55,11 @@
                   <tbody>
                     <tr>
                       <th scope="col">Longitude</th>
-                      <td>{{property_form.longitude}}</td>
+                      <td >{{building_form.longitude}}</td>
                     </tr>
                     <tr>
                       <th scope="col">Latitude</th>
-                      <td>{{property_form.latitude}}</td>
+                      <td>{{building_form.latitude}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -109,9 +109,9 @@
 
           <div class="col-8">
             <div id="map" class="map">
-              {{deal_property.name|json_script:"name"}}
-              {{deal_property.longitude|json_script:"lon"}}
-              {{deal_property.latitude|json_script:"lat"}}
+                {{loan.building.name|json_script:"name"}}
+                {{loan.building.longitude|json_script:"lon"}}
+                {{loan.building.latitude|json_script:"lat"}}
             </div>
           </div>
         </div>

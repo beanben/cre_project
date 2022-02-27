@@ -1,98 +1,47 @@
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect
-from .models.property import Property, PropertyForm, PropertyUpdateForm
+from .models.building import Building, BuildingForm, BuildingUpdateForm
 from .models.sponsor import Sponsor, SponsorForm
-from .models.deal import Deal, DealForm
+from .models.loan import Loan
 from .models.broker import Broker, BrokerForm
+from .models.cost import Cost, CostForm
 import pdb
 
 
 def home(request):
     context = {
-        'deals': Deal.objects.all(),
+        'loans': Loan.objects.all(),
     }
     return render(request, 'cre_finance/home.html', context)
 
-# <=====  SPONSOR VIEWS =====>
+
+# <=====  LOAN VIEWS =====>
 
 
-class SponsorCreateView(CreateView):
-    model = Sponsor
-    form_class = SponsorForm
-    template_name = 'sponsor_create.html'
-    success_url = reverse_lazy('home')
-
-
-class SponsorUpdateView(UpdateView):
-    model = Sponsor
-    form_class = SponsorForm
-    pk_url_kwarg = "sponsor_pk"
-    template_name = "sponsor_update.html"
-
-    def get_success_url(self):
-        return reverse('sponsor:update', args={self.object.pk})
-
-
-class SponsorDeleteView(DeleteView):
-    model = Sponsor
-    pk_url_kwarg = "sponsor_pk"
-    template_name = "confirm_delete.html"
-    success_url = reverse_lazy('home')
-
-# <=====  PROPERTY VIEWS =====>
-
-
-class PropertyCreateView(CreateView):
-    model = Property
-    form_class = PropertyForm
-    template_name = 'property_create.html'
-    success_url = reverse_lazy('home')
-
-
-class PropertyUpdateView(UpdateView):
-    model = Property
-    form_class = PropertyUpdateForm
-    pk_url_kwarg = "property_pk"
-    template_name = "property_update.html"
-    # context_object_name = "property_selected"
-
-    def get_success_url(self):
-        return reverse('property:update', args={self.object.pk})
-
-
-class PropertyDeleteView(DeleteView):
-    model = Property
-    pk_url_kwarg = "property_pk"
-    template_name = "confirm_delete.html"
-    success_url = reverse_lazy('home')
-
-# <=====  DEAL VIEWS =====>
-
-
-def deal_create(request):
-    template = 'deal_create.html'
+def loan_create(request):
+    template = 'loan_create.html'
     if request.method == 'POST':
-        property_form = PropertyForm(request.POST)
+        building_form = BuildingForm(request.POST)
         sponsor_form = SponsorForm(request.POST)
         broker_form = BrokerForm(request.POST)
-        if property_form.is_valid() and sponsor_form.is_valid() and broker_form.is_valid():
-            property_instance = property_form.save()
+        if building_form.is_valid() and sponsor_form.is_valid() and broker_form.is_valid():
+            building_instance = building_form.save()
             sponsor_instance = sponsor_form.save()
             broker_instance = broker_form.save()
-            deal = Deal.objects.create(
+            loan = Loan.objects.create(
                 sponsor=sponsor_instance,
-                property=property_instance,
+                building=building_instance,
                 broker=broker_instance
             )
             return redirect('home')
     else:
-        property_form = PropertyForm()
+        building_form = BuildingForm()
         sponsor_form = SponsorForm()
         broker_form = BrokerForm()
 
     context = {
-        'property_form': property_form,
+        'building_form': building_form,
         'sponsor_form': sponsor_form,
         'broker_form': broker_form
     }
@@ -100,65 +49,69 @@ def deal_create(request):
     return render(request, template, context)
 
 
-# def deal_update(request, deal_pk):
-#     template = 'deal_update.html'
-#     deal = Deal.objects.get(pk=deal_pk)
-#     property_instance = Property.objects.get(pk=deal.property.pk)
-#     print('\n deal:', deal)
-#     print('property_instance:', property_instance)
-
-# class DealCreateView(CreateView):
-#     model = Deal
-#     form_class = DealForm
-#     template_name = 'deal_create.html'
-#     success_url = reverse_lazy('home')
-#
-def deal_update(request, deal_pk):
-    template = 'deal_update.html'
-    deal = Deal.objects.get(pk=deal_pk)
-    deal_property = Property.objects.get(pk=deal.property.pk)
-    deal_sponsor = Sponsor.objects.get(pk=deal.sponsor.pk)
-    deal_broker = Broker.objects.get(pk=deal.broker.pk)
+def loan_update_description(request, loan_pk):
+    template = 'loan_update.html'
+    loan = Loan.objects.get(pk=loan_pk)
+    loan_building = Building.objects.get(pk=loan.building.pk)
+    loan_sponsor = Sponsor.objects.get(pk=loan.sponsor.pk)
+    loan_broker = Broker.objects.get(pk=loan.broker.pk)
     if request.method == 'POST':
-        property_form = PropertyUpdateForm(request.POST, instance=deal_property)
-        sponsor_form = SponsorForm(request.POST, instance=deal_sponsor)
-        broker_form = BrokerForm(request.POST, instance=deal_broker)
-        if property_form.is_valid() and sponsor_form.is_valid() and broker_form.is_valid():
-            property_instance = property_form.save()
+        building_form = BuildingUpdateForm(request.POST, instance=loan_building)
+        sponsor_form = SponsorForm(request.POST, instance=loan_sponsor)
+        broker_form = BrokerForm(request.POST, instance=loan_broker)
+        if building_form.is_valid() and sponsor_form.is_valid() and broker_form.is_valid():
+            building_instance = building_form.save()
             sponsor_instance = sponsor_form.save()
             broker_instance = broker_form.save()
 
-            return redirect(reverse('deal:update', kwargs={'deal_pk': deal_pk}))
+            return redirect(
+                reverse('loan:building_costs:create',
+                        kwargs={'loan_pk': loan_pk})
+            )
     else:
-        property_form = PropertyUpdateForm(instance=deal_property)
-        sponsor_form = SponsorForm(instance=deal_sponsor)
-        broker_form = BrokerForm(instance=deal_broker)
+        building_form = BuildingUpdateForm(instance=loan_building)
+        sponsor_form = SponsorForm(instance=loan_sponsor)
+        broker_form = BrokerForm(instance=loan_broker)
 
     context = {
-        'property_form': property_form,
+        'building_form': building_form,
         'sponsor_form': sponsor_form,
         'broker_form': broker_form,
-        'deal_property': deal_property,
+        'loan': loan
     }
-    print("deal_property.longitude:", deal_property.longitude)
 
     return render(request, template, context)
 
 
-class DealUpdateView(UpdateView):
-    model = Deal
-    form_class = DealForm
-    pk_url_kwarg = "deal_pk"
-    template_name = "deal_update.html"
-    context_object_name = "deal"
-
-    def get_success_url(self):
-        return reverse('deal:update', args={self.object.pk})
-
-
-class DealDeleteView(DeleteView):
-    model = Deal
-    pk_url_kwarg = "deal_pk"
-    template_name = "deal_delete.html"
-    context_object_name = "deal"
+class LoanDeleteView(DeleteView):
+    model = Loan
+    pk_url_kwarg = "loan_pk"
+    template_name = "loan_delete.html"
+    context_object_name = "loan"
     success_url = reverse_lazy('home')
+
+# <=====  COST VIEWS =====>
+
+
+class MultipleCostCreateView(CreateView):
+    model = Cost
+    form_class = CostForm
+    template_name = 'cost_create_multiple.html'
+
+    def get(self, request, *args, **kwargs):
+        formset = CostFormSet(queryset=Cost.objects.none())
+        context = {"formset": formset}
+        return render(request, self.template_name, context)
+
+    def post(self, request, building_pk, *args, **kwargs):
+        building = Building.objects.get(pk=building_pk)
+        formset = CostFormSet(data=request.POST)
+        if formset.is_valid():
+            costs = formset.save(commit=False)
+            for cost in costs:
+                cost.building = building
+                cost.save()
+            return redirect('building:create', loan_pk=loan_pk)
+
+        context = {"formset": formset}
+        return render(request, self.template_name, context)

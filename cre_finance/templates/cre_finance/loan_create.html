@@ -1,15 +1,88 @@
-{% extends "cre_finance/base.html" %}
+building{% extends "cre_finance/base.html" %}
 
 
 {% block title %}
-  Create Loan
-{% endblock title%}
+  Description
+{% endblock title %}
 
-{% block content %}
+{% block sidebar %}
+  {% include 'cre_finance/sidebar.html' %}
+{% endblock sidebar %}
 
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
-</form>
+{% block section %}
+<div class="container">
+  <div class="row p-3">
+    <div class="col">
+      <form method="post">{% csrf_token %}
+        <div class="col">
+          <div class="row border">
 
-{% endblock %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Building Name</th>
+                  <th scope="col">Street Address</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Postcode</th>
+                  <th scope="col">Country</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{building_form.name}}</td>
+                  <td>{{building_form.street_address}}</td>
+                  <td>{{building_form.city}}</td>
+                  <td>{{building_form.postcode}}</td>
+                  <td>{{building_form.country}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="row border">
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sponsor Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{sponsor_form.name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+              <div class="row border">
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Broker Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{broker_form.name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+            <div class="col-6 border">
+              Map
+            </div>
+          </div>
+        </div>
+
+        <input type="submit" value="Save">
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock section %}
