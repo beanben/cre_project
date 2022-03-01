@@ -1,11 +1,12 @@
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.detail import DetailView
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from .models.building import Building, BuildingForm, BuildingUpdateForm
 from .models.sponsor import Sponsor, SponsorForm
 from .models.loan import Loan
 from .models.broker import Broker, BrokerForm
-from .models.cost import Cost, CostForm
+from .models.cost import Cost, CostForm, CostFormSet
 import pdb
 
 
@@ -90,6 +91,15 @@ class LoanDeleteView(DeleteView):
     context_object_name = "loan"
     success_url = reverse_lazy('home')
 
+# <=====  BUILDING VIEWS =====>
+
+
+class BuildingDetailView(DetailView):
+    model = Building
+    pk_url_kwarg = "building_pk"
+    template_name = "building_detail.html"
+    context_object_name = "building"
+
 # <=====  COST VIEWS =====>
 
 
@@ -111,7 +121,7 @@ class MultipleCostCreateView(CreateView):
             for cost in costs:
                 cost.building = building
                 cost.save()
-            return redirect('building:create', loan_pk=loan_pk)
+            return redirect('building:create')
 
         context = {"formset": formset}
         return render(request, self.template_name, context)

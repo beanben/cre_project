@@ -1,4 +1,4 @@
-Building{% extends "cre_finance/base.html" %}
+{% extends "cre_finance/base.html" %}
 {% load static %}
 
 {% block title %}
@@ -134,5 +134,10 @@ Building{% extends "cre_finance/base.html" %}
 {% endblock section %}
 
 {% block js_imported %}
-  <script src="{% static 'cre_finance/js/cre_map.js' %}"></script>
+<!-- leaflet -->
+<script
+src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+<script src="{% static 'cre_finance/js/cre_map.js' %}"></script>
 {% endblock js_imported %}

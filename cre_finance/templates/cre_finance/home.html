@@ -1,4 +1,4 @@
-Building{% extends "cre_finance/base.html" %}
+{% extends "cre_finance/base.html" %}
 
 
 {% block title %}
@@ -33,7 +33,11 @@ Building{% extends "cre_finance/base.html" %}
                 {{loan.sponsor.name}}
               </a>
             </td>
-            <td>{{loan.building.name}}</td>
+            <td>
+              <a href="{% url 'building:detail' loan.building.pk %}">
+                {{loan.building.name}}
+              </a>
+            </td>
             <td>{{loan.broker.name}}</td>
             <td>
               <a href="{% url 'loan:delete' loan.pk %}">

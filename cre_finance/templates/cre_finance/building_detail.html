@@ -1,0 +1,21 @@
+{% extends "cre_finance/base.html" %}
+{% load static %}
+
+{% block title %}
+  {{building.name}}
+{% endblock title %}
+
+{% block sidebar %}
+  {% include 'cre_finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block section %}
+
+
+{{building.name}}
+
+<div>
+  <a href="{% url 'building:cost:create-multiple' building.pk %}">Create Multiple Cost</a>
+</div>
+
+{% endblock section %}
