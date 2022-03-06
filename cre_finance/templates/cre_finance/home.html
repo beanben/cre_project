@@ -19,26 +19,36 @@
       <table class="table">
         <thead>
           <tr>
+            <th scope="col">Loan Name</th>
             <th scope="col">Sponsor Name</th>
             <th scope="col">Building Name</th>
             <th scope="col">Broker Name</th>
+            <th scope="col">Costs Funded</th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          {% for loan in loans %}
+          {% for loan in loan_costs_funded %}
           <tr>
+            <td>{{loan}}</td>
             <td>
               <a href="{% url 'loan:update_description' loan.pk %}">
                 {{loan.sponsor.name}}
               </a>
             </td>
-            <td>
-              <a href="{% url 'building:detail' loan.building.pk %}">
-                {{loan.building.name}}
-              </a>
-            </td>
+            <td>{{loan.building.name}}</td>
             <td>{{loan.broker.name}}</td>
+            <td>
+                {% if loan.sum_costs is None %}
+                <a href="{% url 'building:cost:create' loan.building.pk %}">
+                  -
+                </a>
+                {% else %}
+                <a href="{% url 'building:cost:update' loan.building.pk %}">
+                {{loan.sum_costs }}
+                </a>
+                {% endif %}
+            </td>
             <td>
               <a href="{% url 'loan:delete' loan.pk %}">
               Delete

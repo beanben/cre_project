@@ -1,0 +1,57 @@
+{% extends "cre_finance/base.html" %}
+{% load static %}
+
+{% block title %}
+  Create Cost
+{% endblock title%}
+
+{% block sidebar %}
+  {% include 'cre_finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block section %}
+<div class="row">
+  <div class="col-10 offset-1">
+      <form id="form-container" method="post">{% csrf_token %}
+          <div class="row text-center">
+            <div class="col-2 p-1">Category</div>
+            <div class="col-2 p-1">Description</div>
+            <div class="col-1 p-1">Amount</div>
+            <div class="col-2 p-1">Start Date</div>
+            <div class="col-1 p-1">Duration</div>
+            <div class="col-1 p-1">End Date</div>
+            <div class="col-1 p-1">Curve</div>
+             {% if 'update' in request.path %}
+             <div class="col-1">Delete</div>
+             {% endif %}
+          </div>
+          {{ formset.management_form }}
+          {% for form in formset %}
+          {{form.id}}
+          <div class="row cost-form">
+            <div class="col-2 p-1">{{form.category}}</div>
+            <div class="col-2 p-1">{{form.description}}</div>
+            <div class="col-1 p-1">{{form.amount}}</div>
+            <div class="col-2 p-1">{{form.date_start}}</div>
+            <div class="col-1 p-1">{{form.duration}}</div>
+            <div class="col-1 p-1">{{form.date_end}}</div>
+            <div class="col-1 p-1">{{form.curve}}</div>
+            {% if 'update' in request.path %}
+            <div class="col-1 p-1">
+                {{form.DELETE}}
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <button
+          id="add-form"
+          type="button"
+          class="btn btn-primary">Add Another Cost</button>
+          |
+          <button
+          type="submit"
+          class="btn btn-primary">Update Costs</button>
+      </form>
+  </div>
+</div>
+{% endblock section %}

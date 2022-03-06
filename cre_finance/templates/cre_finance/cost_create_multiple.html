@@ -10,9 +10,8 @@
 {% endblock sidebar %}
 
 {% block section %}
-<div class="container">
-  <div class="row">
-    <div class="col">
+<div class="row">
+  <div class="col-10 offset-1">
       <div class="row text-center">
         <div class="col-2 p-1">Category</div>
         <div class="col-2 p-1">Description</div>
@@ -29,19 +28,26 @@
         <div class="cost-form">
           <div class="row">
             <div class="col-2 p-1">{{form.category}}</div>
-            <div class="col-2 p-1">{{form.description}}</div>
-            <div class="col-2 p-1">{{form.amount}}</div>
+            <div class="col-2 p-1">
+              {{form.description}}
+            </div>
+            <div class="col-2 p-1">
+              {{form.amount}}
+            </div>
             <div class="col-2 p-1">{{form.date_start}}</div>
             <div class="col-2 p-1">{{form.duration}}</div>
-            <div class="col-1 p-1">{{form.date_end}}</div>
             <div class="col-1 p-1">{{form.curve}}</div>
           </div>
         </div>
         {% endfor %}
-        <button id="add-form" type="button">Add Another Cost</button>
-        <button type="submit">Create Costs</button>
+        <button id="add-form" type="button" class="btn btn-primary">
+          Add Another Cost
+        </button> |
+
+        <button
+          type="submit"
+          class="btn btn-primary">Create costs</button>
       </form>
     </div>
   </div>
-</div>
 {% endblock section %}

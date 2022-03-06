@@ -13,9 +13,19 @@
 
 
 {{building.name}}
+{{building.city}}
+
+
+{% for cost in building.cost_set.all %}
+  <a href="{% url 'building:cost:update' building.pk %}">
+    {{cost}}
+  </a>
+{% endfor %}
 
 <div>
-  <a href="{% url 'building:cost:create-multiple' building.pk %}">Create Multiple Cost</a>
+  <a href="{% url 'building:cost:create-multiple' building.pk %}">
+    Create Multiple Cost
+  </a>
 </div>
 
 {% endblock section %}

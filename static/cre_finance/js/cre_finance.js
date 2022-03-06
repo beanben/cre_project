@@ -15,6 +15,10 @@ function addForm(e) {
         container.insertBefore(newForm, addButton) //Insert the new form at the end of the list of forms
 
         totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form
+
+        console.log("formNum:", formNum)
+        console.log("totalForms:", totalForms)
+
 };
 
 if (addButton) {

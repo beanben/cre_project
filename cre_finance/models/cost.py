@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 from django.forms import ModelForm, SelectDateWidget
 from django.urls import reverse
@@ -8,6 +9,7 @@ import pandas as pd
 from datetime import date
 import json
 from django.forms import modelformset_factory
+from dateutil.relativedelta import relativedelta
 
 
 class Cost(models.Model):
@@ -38,10 +40,10 @@ class Cost(models.Model):
         choices=TYPE_CHOICES,
         default=CONSTRUCTION_COSTS)
     description = models.CharField(blank=True, max_length=100)
-    amount = models.FloatField(blank=True, null=True)
+    amount = models.FloatField()
     date_start = models.DateField(default=date.today)
     duration = models.FloatField()
-    date_end = models.DateField(default=date.today)
+    date_end = models.DateField(blank=True, null=True)
     curve = models.CharField(
         max_length=100,
         choices=TYPE_CURVES,
@@ -49,18 +51,26 @@ class Cost(models.Model):
     building = models.ForeignKey(Building, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'£{"{:,.0f}".format(self.amount)} - {self.type}'
+        return f'{self.category} - id# {self.pk}'
+
+    def get_absolute_url(self):
+        return reverse('cost:detail', kwargs={'cost_pk': self.pk})
 
     def save(self, *args, **kwargs):
         self.full_clean()
         return super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.duration:
+            self.date_end = self.date_start + \
+                relativedelta(months=self.duration)
 
 
 class CostForm(ModelForm):
 
     class Meta:
         model = Cost
-        fields = [
+        fields = (
             'category',
             'description',
             'amount',
@@ -68,7 +78,12 @@ class CostForm(ModelForm):
             'duration',
             'date_end',
             'curve'
-        ]
+        )
+        widgets = {
+            'duration': forms.TextInput(attrs={
+                'placeholder': 'months'
+            })
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -76,4 +91,34 @@ class CostForm(ModelForm):
             visible.field.widget.attrs['class'] = 'form-control'
 
 
-CostFormSet = modelformset_factory(Cost, extra=2, form=CostForm)
+CostFormSet = modelformset_factory(
+    Cost,
+    extra=1,
+    form=CostForm,
+    can_order=True,
+    can_delete=True
+)
+
+CostUpdateFormSet = modelformset_factory(
+    Cost,
+    extra=0,
+    form=CostForm,
+    can_order=True,
+    can_delete=True
+)
+
+
+class MyCostFormSet(CostFormSet):
+    # allow the formset to use model default values
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted = False
+
+
+class MyCostUpdateFormSet(CostUpdateFormSet):
+    # allow the formset to use model default values
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted = False

@@ -15,6 +15,14 @@
 .edit {
   background: url('../../cre_finance/img/edit.svg') no-repeat;
 }
+.delete {
+  background-position: center;
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  margin: auto;
+  background: url('../../cre_finance/img/x_icon.svg') no-repeat;
+}
 
 .frame{
   height: 1rem;
